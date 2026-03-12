@@ -15,8 +15,10 @@ return new class extends Migration
             $table->string('id_producto', 15)->primary(); 
             $table->string('nombre', 100); 
             $table->decimal('precio', 10, 2); 
-            $table->string('categoria', 50); 
+            $table->unsignedBigInteger('id_categoria');
             $table->timestamps();
+
+            $table->foreign('id_categoria')->references('id_categoria')->on('categorias')->onDelete('restrict');
         });
     }
 

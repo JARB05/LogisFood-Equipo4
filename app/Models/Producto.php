@@ -10,8 +10,12 @@ class Producto extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id_producto', 'nombre', 'precio', 'categoria'
+        'id_producto', 'nombre', 'precio', 'id_categoria'
     ];
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
+    }
 
     public function detallesPedido()
     {

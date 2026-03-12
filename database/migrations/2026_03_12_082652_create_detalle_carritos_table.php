@@ -21,6 +21,7 @@ return new class extends Migration
             // Llaves Foráneas
             $table->foreign('id_carrito')->references('id_carrito')->on('carritos')->onDelete('cascade');
             $table->foreign('id_producto')->references('id_producto')->on('productos')->onDelete('cascade');
+            $table->unique(['id_carrito', 'id_producto']); //evita que el mismo producto se inserte dos veces en un mismo carrito
         });
     }
 

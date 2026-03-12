@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreign('id_pedido')->references('id_pedido')->on('pedidos')->onDelete('cascade');
             // restrict asegura que no se pueda borrar un producto si ya se vendió alguna vez
             $table->foreign('id_producto')->references('id_producto')->on('productos')->onDelete('restrict'); 
+            $table->unique(['id_pedido', 'id_producto']); //evita que el mismo producto se inserte dos veces en el mismo carrito
         });
     }
 
