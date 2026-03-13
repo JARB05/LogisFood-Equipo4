@@ -34,7 +34,8 @@
             color: #444;
         }
 
-        input {
+        /* Se agregó 'select' a esta regla para mantener el diseño de Oliver */
+        input, select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -102,8 +103,15 @@
             <label for="precio">Precio</label>
             <input type="number" step="0.01" name="precio" id="precio" value="{{ old('precio') }}" required>
 
-            <label for="categoria">Categoría</label>
-            <input type="text" name="categoria" id="categoria" value="{{ old('categoria') }}" required>
+            <label for="id_categoria">Categoría</label>
+            <select name="id_categoria" id="id_categoria" required>
+                <option value="">Seleccione una categoría</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id_categoria }}" {{ old('id_categoria') == $categoria->id_categoria ? 'selected' : '' }}>
+                        {{ $categoria->nombre }}
+                    </option>
+                @endforeach
+            </select>
 
             <label for="imagen_url">URL de la imagen</label>
             <input type="text" name="imagen_url" id="imagen_url" value="{{ old('imagen_url') }}">

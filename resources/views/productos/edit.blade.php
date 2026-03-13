@@ -34,12 +34,20 @@
             color: #444;
         }
 
-        input {
+        /* Se agregó 'select' a esta regla */
+        input, select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-sizing: border-box;
+        }
+
+        /* Estilo extra para inputs bloqueados (readonly) */
+        input[readonly] {
+            background-color: #e5e7eb;
+            color: #6b7280;
+            cursor: not-allowed;
         }
 
         .botones {
@@ -95,7 +103,7 @@
             @method('PUT')
 
             <label for="id_producto">ID del producto</label>
-            <input type="text" name="id_producto" id="id_producto" value="{{ old('id_producto', $producto->id_producto) }}" required>
+            <input type="text" name="id_producto" id="id_producto" value="{{ old('id_producto', $producto->id_producto) }}" required readonly>
 
             <label for="nombre">Nombre</label>
             <input type="text" name="nombre" id="nombre" value="{{ old('nombre', $producto->nombre) }}" required>
@@ -103,8 +111,15 @@
             <label for="precio">Precio</label>
             <input type="number" step="0.01" name="precio" id="precio" value="{{ old('precio', $producto->precio) }}" required>
 
-            <label for="categoria">Categoría</label>
-            <input type="text" name="categoria" id="categoria" value="{{ old('categoria', $producto->categoria) }}" required>
+            <label for="id_categoria">Categoría</label>
+            <select name="id_categoria" id="id_categoria" required>
+                <option value="">Seleccione una categoría</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id_categoria }}" {{ old('id_categoria', $producto->id_categoria) == $categoria->id_categoria ? 'selected' : '' }}>
+                        {{ $categoria->nombre }}
+                    </option>
+                @endforeach
+            </select>
 
             <label for="imagen_url">URL de la imagen</label>
             <input type="text" name="imagen_url" id="imagen_url" value="{{ old('imagen_url', $producto->imagen_url) }}">
