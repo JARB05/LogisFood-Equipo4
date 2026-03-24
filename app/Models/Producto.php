@@ -10,7 +10,7 @@ class Producto extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id_producto', 'nombre', 'precio', 'id_categoria'
+        'id_producto', 'nombre', 'precio', 'imagen_url', 'id_categoria' // Actualizado
     ];
     public function categoria()
     {

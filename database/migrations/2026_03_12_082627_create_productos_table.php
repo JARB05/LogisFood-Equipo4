@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('id_producto', 15)->primary(); 
             $table->string('nombre', 100); 
             $table->decimal('precio', 10, 2); 
+            $table->string('imagen_url', 255)->nullable(); // Nuevo campo requerido
             $table->unsignedBigInteger('id_categoria');
             $table->timestamps();
 
