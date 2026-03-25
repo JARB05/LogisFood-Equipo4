@@ -38,6 +38,21 @@ class UsuarioSeeder extends Seeder
             'rol' => 'Repartidor'
         ]);
 
+        /*Nuevo usuario empleado*/
+        Usuario::create([
+            'id_usuario' => 'USR-EMP01',
+            'nombre' => 'Carlos Cocina',
+            'email' => 'empleado@logisfood.com',
+            'password_hash' => Hash::make('empleado123'),
+            'direccion' => 'Cocina Central LogisFood',
+            'rol' => 'Empleado'
+        ]);
+
+        /*Nuevos empleados aleatorios */
+        Usuario::factory()->count(5)->create([
+            'rol' => 'Empleado'
+        ]);
+
         /*5 Administradores aleatorios*/
         Usuario::factory()->count(5)->create([
             'rol' => 'Administrador'

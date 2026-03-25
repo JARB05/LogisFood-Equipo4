@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email', 100)->unique(); 
             $table->string('password_hash', 255); 
             $table->string('direccion', 255)->nullable(); 
-            $table->enum('rol', ['Cliente', 'Administrador', 'Repartidor'])->default('Cliente'); 
+            $table->enum('rol', ['Cliente', 'Administrador', 'Repartidor', 'Empleado'])->default('Cliente');  //nuevo rol Empleado
             $table->timestamps();
         });
     }
