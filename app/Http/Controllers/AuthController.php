@@ -18,7 +18,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request): RedirectResponse
+public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -33,7 +33,13 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('productos.index'));
+        $rolUsuario = Auth::user()->rol;
+
+        if ($rolUsuario === 'Administrador') {
+            return redirect()->route('admin.dashboard');
+        } else {
+            return redirect()->route('pedidos.index');
+        }
     }
 
     public function logout(Request $request): RedirectResponse

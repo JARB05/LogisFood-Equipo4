@@ -36,6 +36,11 @@ class Usuario extends Authenticatable implements CanResetPasswordContract
         return 'password_hash';
     }
 
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
+
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new ResetPasswordNotification($token));
