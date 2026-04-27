@@ -33,6 +33,8 @@ Route::middleware('guest')->group(function () {
     
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 });
 
 // RUTAS PROTEGIDAS (Solo entras si iniciaste sesión) 
