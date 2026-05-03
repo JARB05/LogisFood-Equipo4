@@ -9,9 +9,12 @@ class Producto extends Model
     protected $primaryKey = 'id_producto';
     public $incrementing = false;
     protected $keyType = 'string';
+    
+    // se agregó 'stock' para permitir su guardado y actualización
     protected $fillable = [
-        'id_producto', 'nombre', 'precio', 'imagen_url', 'id_categoria' // Actualizado
+        'id_producto', 'nombre', 'precio', 'stock', 'imagen_url', 'id_categoria' 
     ];
+
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
