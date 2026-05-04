@@ -1,78 +1,124 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Pedidos</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; padding: 40px; margin: 0; }
-        .contenedor { max-width: 1100px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        th { background-color: #f9fafb; font-weight: bold; }
-        .badge { padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: bold; }
-        .badge-creado { background: #e0f2fe; color: #0284c7; }
-        .badge-preparacion { background: #fef08a; color: #854d0e; }
-        .badge-camino { background: #fed7aa; color: #c2410c; }
-        .badge-entregado { background: #dcfce7; color: #166534; }
-        select { padding: 6px; border-radius: 4px; border: 1px solid #ccc; }
-        .btn-guardar { background: #3b82f6; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <div class="contenedor">
-        <h1>Órdenes y Pedidos</h1>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Pedido</th>
-                    <th>Cliente</th>
-                    <th>Fecha</th>
-                    <th>Total</th>
-                    <th>Entrega</th>
-                    <th>Estado Actual</th>
-                    <th>Acción (Actualizar Estado)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($pedidos as $pedido)
-                <tr>
-                    <td>{{ $pedido->id_pedido }}</td>
-                    <td>{{ $pedido->id_cliente }}</td>
-                    <td>{{ $pedido->fecha }}</td>
-                    <td>${{ $pedido->total }}</td>
-                    <td>{{ $pedido->tipo_entrega }}</td>
-                    <td>
-                        <span class="badge 
-                            @if($pedido->estado == 'Creado' || $pedido->estado == 'Pagado') badge-creado 
-                            @elseif($pedido->estado == 'En Preparación') badge-preparacion 
-                            @elseif($pedido->estado == 'En Camino') badge-camino 
-                            @else badge-entregado @endif">
-                            {{ $pedido->estado }}
-                        </span>
-                    </td>
-                    <td>
-                        <form action="#" method="POST" style="display:flex; gap: 5px;">
+@extends('layouts.app')
+@section('title', 'Pedidos')
+
+@section('content')
+<style>
+    .page-title { font-size: 24px; font-weight: 700; color: #1e3a8a; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(37,99,235,0.08); }
+    thead { background: #1d4ed8; }
+    thead th { padding: 14px 16px; text-align: left; color: #fff; font-size: 13px; font-weight: 600; }
+    tbody td { padding: 14px 16px; font-size: 14px; color: #1e293b; border-bottom: 1px solid #e0e7ff; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    .empty { text-align: center; color: #64748b; padding: 40px; }
+
+    /* Estado badges */
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-Creado        { background: #f8faff; color: #475569; border: 1px solid #e2e8f0; }
+    .badge-Pagado        { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-Preparacion   { background: #fef9c3; color: #854d0e; border: 1px solid #fde68a; }
+    .badge-Camino        { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .badge-Entregado     { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+    /* Botones de avance por rol */
+    .btn-accion {
+        padding: 8px 18px;
+        border: none; border-radius: 7px;
+        font-size: 13px; font-weight: 600; cursor: pointer;
+        background: #1d4ed8; color: #fff;
+    }
+    .btn-accion:hover { background: #1e40af; }
+    .btn-accion.repartidor { background: #0f766e; }
+    .btn-accion.repartidor:hover { background: #0d6460; }
+    .no-action { font-size: 13px; color: #94a3b8; }
+</style>
+
+<h1 class="page-title">
+    @if(auth()->user()->rol === 'Cliente') Mis Pedidos
+    @elseif(auth()->user()->rol === 'Empleado') Gestión de Pedidos
+    @elseif(auth()->user()->rol === 'Repartidor') Pedidos para Entrega
+    @else Todos los Pedidos
+    @endif
+</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Entrega</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($pedidos as $pedido)
+        @php
+            $rol    = auth()->user()->rol;
+            $estado = $pedido->estado;
+        @endphp
+        <tr>
+            <td>{{ $pedido->id_pedido }}</td>
+            <td>{{ $pedido->cliente->nombre ?? $pedido->id_cliente }}</td>
+            <td>{{ \Carbon\Carbon::parse($pedido->fecha)->format('d/m/Y') }}</td>
+            <td>${{ number_format($pedido->total, 2) }}</td>
+            <td>{{ $pedido->tipo_entrega }}</td>
+            <td>
+                @php
+                    $badgeClass = match($estado) {
+                        'Creado'         => 'badge-Creado',
+                        'Pagado'         => 'badge-Pagado',
+                        'En Preparación' => 'badge-Preparacion',
+                        'En Camino'      => 'badge-Camino',
+                        'Entregado'      => 'badge-Entregado',
+                        default          => 'badge-Creado',
+                    };
+                @endphp
+                <span class="badge {{ $badgeClass }}">{{ $estado }}</span>
+            </td>
+            <td>
+                @php
+                    // Determinar qué acción puede realizar cada rol en cada estado
+                    $accion = null;
+                    if ($rol === 'Cliente' && $estado === 'Creado') {
+                        $accion = ['label' => 'Marcar pagado', 'route' => route('pedidos.pagar', $pedido->id_pedido), 'class' => ''];
+                    } elseif (in_array($rol, ['Empleado', 'Administrador']) && $estado === 'Pagado') {
+                        $accion = ['label' => 'Iniciar preparación', 'route' => route('pedidos.preparar', $pedido->id_pedido), 'class' => ''];
+                    } elseif (in_array($rol, ['Empleado', 'Administrador']) && $estado === 'En Preparación') {
+                        $accion = ['label' => 'Listo para envío', 'route' => route('pedidos.enviar', $pedido->id_pedido), 'class' => ''];
+                    } elseif ($rol === 'Repartidor' && $estado === 'En Camino') {
+                        $accion = ['label' => 'Marcar entregado', 'route' => route('pedidos.entregar', $pedido->id_pedido), 'class' => 'repartidor'];
+                    }
+                @endphp
+
+                @if($accion)
+                    @if($estado === 'En Preparación' && in_array($rol, ['Empleado', 'Administrador']))
+                        {{-- El envío requiere id_repartidor; mostramos un mini-form con select --}}
+                        <form action="{{ $accion['route'] }}" method="POST" style="display:flex;gap:6px;align-items:center;">
                             @csrf
-                            @method('PUT')
-                            <select name="estado">
-                                <option value="Creado" {{ $pedido->estado == 'Creado' ? 'selected' : '' }}>Creado</option>
-                                <option value="En Preparación" {{ $pedido->estado == 'En Preparación' ? 'selected' : '' }}>En Preparación</option>
-                                <option value="En Camino" {{ $pedido->estado == 'En Camino' ? 'selected' : '' }}>En Camino</option>
-                                <option value="Entregado" {{ $pedido->estado == 'Entregado' ? 'selected' : '' }}>Entregado</option>
+                            <select name="id_repartidor" required style="padding:6px 10px;border:1.5px solid #c7d2fe;border-radius:6px;font-size:13px;">
+                                <option value="">Repartidor...</option>
+                                @foreach(\App\Models\Usuario::where('rol','Repartidor')->get() as $rep)
+                                    <option value="{{ $rep->id_usuario }}">{{ $rep->nombre }}</option>
+                                @endforeach
                             </select>
-                            <button type="submit" class="btn-guardar">OK</button>
+                            <button type="submit" class="btn-accion {{ $accion['class'] }}">{{ $accion['label'] }}</button>
                         </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="7" style="text-align: center; padding: 20px;">No hay pedidos registrados en el sistema.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+                    @else
+                        <form action="{{ $accion['route'] }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn-accion {{ $accion['class'] }}">{{ $accion['label'] }}</button>
+                        </form>
+                    @endif
+                @else
+                    <span class="no-action">Sin acción disponible</span>
+                @endif
+            </td>
+        </tr>
+        @empty
+        <tr><td colspan="7" class="empty">No hay pedidos registrados.</td></tr>
+        @endforelse
+    </tbody>
+</table>
+@endsection

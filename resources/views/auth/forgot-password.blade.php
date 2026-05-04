@@ -1,20 +1,20 @@
 @extends('layouts.auth')
-
 @section('title', 'Recuperar contraseña')
 
-@section('content')
+@section('card-header')
     <h1>Recuperar contraseña</h1>
-    <p>Escribe tu correo y te enviaremos un enlace.</p>
+    <p>Te enviaremos un enlace a tu correo.</p>
+@endsection
 
+@section('content')
     <form method="POST" action="{{ route('password.email') }}">
         @csrf
-
-        <label for="email">Correo</label>
-        <input type="email" name="email" id="email" value="{{ old('email') }}" required>
-
-        <button type="submit">Enviar enlace</button>
+        <div class="field">
+            <label for="email">Correo electrónico</label>
+            <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus>
+        </div>
+        <button type="submit" class="btn-primary">Enviar enlace</button>
     </form>
-
     <div class="links">
         <a href="{{ route('login') }}">Volver al login</a>
     </div>
