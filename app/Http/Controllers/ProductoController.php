@@ -13,7 +13,7 @@ class ProductoController extends Controller
     {
         $productos = Producto::with('categoria')->where('stock', '>', 0)->get();
         $categorias = Categoria::all();
-        return view('productos.menu', compact('productos', 'categorias'));
+        return view('clientes.menu', compact('productos', 'categorias'));
     }
 
     /*Mostrar todos los productos (Read - Panel de Admin)*/
