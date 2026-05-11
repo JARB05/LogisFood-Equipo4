@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'rol' => \App\Http\Middleware\CheckRol::class,
         ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->trustProxies(at: '*');
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
