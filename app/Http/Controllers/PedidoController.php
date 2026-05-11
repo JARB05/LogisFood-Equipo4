@@ -8,17 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
 {
-    public function index()
+public function index()
     {
         $usuario = Auth::user();
-        $query = Pedido::with('detalles.producto');
+        
+        $query = Pedido::with(['detalles.producto', 'cliente']);
 
         if ($usuario->rol === 'Cliente') {
-            $pedidos = $query->where('id_cliente', $usuario->id_usuario)->latest('fecha')->get();
+            $query->where('id_cliente', $usuario->id_usuario);
         } elseif ($usuario->rol === 'Repartidor') {
-            $pedidos = $query->where('id_repartidor', $usuario->id_usuario)->latest('fecha')->get();
-        } else {
-            $pedidos = $query->latest('fecha')->get();
+            $query->where('id_repartidor', $usuario->id_usuario);
+        }
+
+        $pedidos = $query->latest('fecha')->get();
+
+        if ($usuario->rol === 'Repartidor') {
+            return view('pedidos.repartidor', compact('pedidos'));
         }
 
         return view('pedidos.index', compact('pedidos'));
