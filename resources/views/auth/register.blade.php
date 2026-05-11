@@ -1,127 +1,150 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - LogisFood</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@extends('layouts.auth')
+@section('title', 'Registro - LogisFood')
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white text-center">
-                    <h4>Registro de Nuevo Usuario - LogisFood</h4>
+@section('content')
+<div style="background:#fff; padding:40px 48px; box-shadow:0 8px 40px rgba(0,0,0,0.08); border-radius:24px; width:100%; position:relative;">
+
+    <a href="{{ route('login') }}" style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:#9CA3AF; text-decoration:none; margin-bottom:28px; transition:color 0.2s;"
+        onmouseover="this.style.color='#111827'"
+        onmouseout="this.style.color='#9CA3AF'">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Volver al inicio de sesión
+    </a>
+
+    <div style="text-align:center; margin-bottom:32px;">
+        <div style="display:inline-flex; align-items:center; justify-content:center; width:56px; height:56px; background:linear-gradient(135deg,#FF6700,#FF8C3A); border-radius:16px; box-shadow:0 6px 20px rgba(255,103,0,0.30); margin-bottom:16px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="7" y1="2" x2="7" y2="22" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="7" y1="2" x2="7" y2="8" stroke="white" stroke-width="5" stroke-linecap="round"/>
+                <line x1="17" y1="2" x2="17" y2="22" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M14 2v6a3 3 0 0 0 6 0V2" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
+        <h1 style="font-size:24px; font-weight:800; color:#111827; letter-spacing:-0.4px; margin:0 0 4px;">Crear una cuenta</h1>
+        <p style="font-size:14px; color:#9CA3AF; font-weight:500; margin:0;">LogisFood · Regístrate gratis</p>
+    </div>
+
+    <form method="POST" action="{{ route('register') }}" style="display:flex; flex-direction:column; gap:16px;">
+        @csrf
+
+        <div>
+            <label style="display:block; font-size:12px; font-weight:700; color:#374151; margin-bottom:7px; letter-spacing:0.4px; text-transform:uppercase;">Nombre Completo</label>
+            <input type="text" name="nombre" value="{{ old('nombre') }}" placeholder="Tu nombre completo" required autofocus
+                style="display:block; width:100%; border-radius:12px; border:1.5px solid #E5E0D8; background:#FAFAF8; padding:13px 16px; font-size:14px; color:#111827; outline:none; box-sizing:border-box; font-family:'Outfit',sans-serif;"
+                onfocus="this.style.borderColor='#FF6700';this.style.boxShadow='0 0 0 3px rgba(255,103,0,0.10)'"
+                onblur="this.style.borderColor='#E5E0D8';this.style.boxShadow='none'">
+        </div>
+
+        <div>
+            <label style="display:block; font-size:12px; font-weight:700; color:#374151; margin-bottom:7px; letter-spacing:0.4px; text-transform:uppercase;">Correo Electrónico</label>
+            <input type="email" name="email" value="{{ old('email') }}" placeholder="tu@email.com" required
+                style="display:block; width:100%; border-radius:12px; border:1.5px solid #E5E0D8; background:#FAFAF8; padding:13px 16px; font-size:14px; color:#111827; outline:none; box-sizing:border-box; font-family:'Outfit',sans-serif;"
+                onfocus="this.style.borderColor='#FF6700';this.style.boxShadow='0 0 0 3px rgba(255,103,0,0.10)'"
+                onblur="this.style.borderColor='#E5E0D8';this.style.boxShadow='none'">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+                <label style="display:block; font-size:12px; font-weight:700; color:#374151; margin-bottom:7px; letter-spacing:0.4px; text-transform:uppercase;">Contraseña</label>
+                <input type="password" name="password" placeholder="••••••••" required
+                    style="display:block; width:100%; border-radius:12px; border:1.5px solid #E5E0D8; background:#FAFAF8; padding:13px 16px; font-size:14px; color:#111827; outline:none; box-sizing:border-box; font-family:'Outfit',sans-serif;"
+                    onfocus="this.style.borderColor='#FF6700';this.style.boxShadow='0 0 0 3px rgba(255,103,0,0.10)'"
+                    onblur="this.style.borderColor='#E5E0D8';this.style.boxShadow='none'">
+            </div>
+            <div>
+                <label style="display:block; font-size:12px; font-weight:700; color:#374151; margin-bottom:7px; letter-spacing:0.4px; text-transform:uppercase;">Confirmar</label>
+                <input type="password" name="password_confirmation" placeholder="••••••••" required
+                    style="display:block; width:100%; border-radius:12px; border:1.5px solid #E5E0D8; background:#FAFAF8; padding:13px 16px; font-size:14px; color:#111827; outline:none; box-sizing:border-box; font-family:'Outfit',sans-serif;"
+                    onfocus="this.style.borderColor='#FF6700';this.style.boxShadow='0 0 0 3px rgba(255,103,0,0.10)'"
+                    onblur="this.style.borderColor='#E5E0D8';this.style.boxShadow='none'">
+            </div>
+        </div>
+
+        <div style="border-top:1.5px solid #F3EDE4; padding-top:20px; margin-top:4px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+                <div style="width:24px; height:24px; background:#FFF7F0; border-radius:6px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="13" height="13" fill="none" stroke="#FF6700" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
-                <div class="card-body">
-                    <form method="POST" action="">
-                        @csrf
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Nombre Completo</label>
-                            <input type="text" name="name" class="form-control" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Correo Electrónico</label>
-                            <input type="email" name="email" class="form-control" required>
-                        </div>
+                <span style="font-size:13px; font-weight:700; color:#FF6700; text-transform:uppercase; letter-spacing:0.5px;">Información Geográfica</span>
+            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
+            <div>
+                <label style="display:block; font-size:12px; font-weight:700; color:#374151; margin-bottom:7px; letter-spacing:0.4px; text-transform:uppercase;">País de Residencia</label>
+                <select name="pais" id="pais" required
+                    style="display:block; width:100%; border-radius:12px; border:1.5px solid #E5E0D8; background:#FAFAF8; padding:13px 16px; font-size:14px; color:#111827; outline:none; box-sizing:border-box; appearance:none; font-family:'Outfit',sans-serif; cursor:pointer;"
+                    onfocus="this.style.borderColor='#FF6700';this.style.boxShadow='0 0 0 3px rgba(255,103,0,0.10)'"
+                    onblur="this.style.borderColor='#E5E0D8';this.style.boxShadow='none'">
+                    <option value="">Cargando países...</option>
+                </select>
+            </div>
 
-                        <hr>
-                        <h5 class="mb-3 text-primary">Información Geográfica</h5>
-
-                        <div class="mb-4">
-                            <label for="pais" class="form-label">País de Residencia</label>
-                            <select name="pais" id="pais" class="form-select" required>
-                                <option value="">Cargando países...</option>
-                            </select>
-                        </div>
-
-                        <div id="info-pais-card" class="card mb-4 border-primary" style="display: none;">
-                            <div class="card-body bg-light">
-                                <div class="d-flex align-items-center mb-3">
-                                    <img id="flag-img" src="" alt="Bandera" width="60" class="me-3 border shadow-sm">
-                                    <h5 id="country-name" class="mb-0 text-primary">Nombre del País</h5>
-                                </div>
-                                <ul class="list-unstyled mb-0" style="font-size: 0.95em;">
-                                    <li class="mb-1"><strong>🏛️ Capital:</strong> <span id="capital-text"></span></li>
-                                    <li class="mb-1"><strong>💰 Moneda:</strong> <span id="currency-text"></span></li>
-                                    <li class="mb-1"><strong>🗣️ Idioma(s):</strong> <span id="language-text"></span></li>
-                                    <li><strong>⏰ Zona Horaria:</strong> <span id="timezone-text"></span></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-dark">Crear Cuenta</button>
-                            <a href="{{ route('login') }}" class="btn btn-outline-secondary">Ya tengo cuenta</a>
-                        </div>
-                    </form>
+            <div id="country-info-card" style="display:none; margin-top:14px; background:#FFF7F0; border:1.5px solid #FFD4B3; border-radius:14px; padding:16px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                    <span id="c-code" style="font-size:11px; font-weight:800; color:#FF6700; background:#FFE8D6; padding:3px 8px; border-radius:6px;"></span>
+                    <span id="c-name" style="font-size:15px; font-weight:700; color:#111827;"></span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div style="font-size:12px; color:#6B7280;"><span style="font-weight:700; color:#374151;">Capital:</span> <span id="c-capital"></span></div>
+                    <div style="font-size:12px; color:#6B7280;"><span style="font-weight:700; color:#374151;">Moneda:</span> <span id="c-currency"></span></div>
+                    <div style="font-size:12px; color:#6B7280;"><span style="font-weight:700; color:#374151;">Idioma:</span> <span id="c-lang"></span></div>
+                    <div style="font-size:12px; color:#6B7280;"><span style="font-weight:700; color:#374151;">Zona:</span> <span id="c-timezone"></span></div>
                 </div>
             </div>
         </div>
+
+        <button type="submit"
+            style="width:100%; padding:14px; background:linear-gradient(135deg,#FF6700,#FF8030); color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(255,103,0,0.30); margin-top:4px; font-family:'Outfit',sans-serif; letter-spacing:0.2px; transition:transform 0.15s, box-shadow 0.15s;"
+            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(255,103,0,0.40)'"
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 16px rgba(255,103,0,0.30)'">
+            Crear Cuenta
+        </button>
+    </form>
+
+    <div style="margin-top:20px; text-align:center; font-size:13px; color:#9CA3AF;">
+        <a href="{{ route('login') }}" style="font-weight:700; color:#6B7280; text-decoration:none;">Ya tengo cuenta</a>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const selectPais = document.getElementById('pais');
-    const infoCard = document.getElementById('info-pais-card');
-    let listaPaises = []; 
+document.addEventListener('DOMContentLoaded', function () {
+    const select = document.getElementById('pais');
+    const infoCard = document.getElementById('country-info-card');
+    let countriesData = {};
 
-    fetch('https://restcountries.com/v3.1/all?fields=name,cca2,capital,currencies,languages,timezones,flags')
-        .then(response => response.json())
+    fetch('https://restcountries.com/v3.1/all?fields=name,cca2,capital,currencies,languages,timezones')
+        .then(r => r.json())
         .then(data => {
-            listaPaises = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
-            
-            selectPais.innerHTML = '<option value="">Selecciona tu país...</option>';
-            listaPaises.forEach(pais => {
-                let option = document.createElement('option');
-                option.value = pais.cca2; 
-                option.textContent = pais.name.common;
-                selectPais.appendChild(option);
+            data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+            select.innerHTML = '<option value="">Selecciona tu país...</option>';
+            data.forEach(p => {
+                countriesData[p.cca2] = p;
+                const opt = document.createElement('option');
+                opt.value = p.cca2;
+                opt.textContent = p.name.common;
+                if ('{{ old('pais') }}' === p.cca2) opt.selected = true;
+                select.appendChild(opt);
             });
+            if (select.value) updateCountryCard(select.value);
         })
-        .catch(error => {
-            console.error('Error API:', error);
-            selectPais.innerHTML = '<option value="">Error al cargar países</option>';
-        });
+        .catch(() => { select.innerHTML = '<option value="">Error al cargar países</option>'; });
 
-    selectPais.addEventListener('change', function() {
-        const codigo = this.value;
-        if (!codigo) {
-            infoCard.style.display = 'none'; 
-            return;
-        }
+    select.addEventListener('change', e => updateCountryCard(e.target.value));
 
-        const pData = listaPaises.find(p => p.cca2 === codigo);
-        if (pData) {
-            const capital = pData.capital && pData.capital.length > 0 ? pData.capital[0] : 'N/A';
-            let moneda = 'N/A';
-            if (pData.currencies) {
-                const cData = Object.values(pData.currencies)[0];
-                moneda = `${cData.name} (${cData.symbol})`;
-            }
-            const idiomas = pData.languages ? Object.values(pData.languages).join(', ') : 'N/A';
-            const zonas = pData.timezones ? pData.timezones.join(', ') : 'N/A';
-
-            document.getElementById('flag-img').src = pData.flags.svg;
-            document.getElementById('country-name').textContent = pData.name.common;
-            document.getElementById('capital-text').textContent = capital;
-            document.getElementById('currency-text').textContent = moneda;
-            document.getElementById('language-text').textContent = idiomas;
-            document.getElementById('timezone-text').textContent = zonas;
-
-            infoCard.style.display = 'block';
-        }
-    });
+    function updateCountryCard(code) {
+        if (!code || !countriesData[code]) { infoCard.style.display = 'none'; return; }
+        const c = countriesData[code];
+        document.getElementById('c-code').textContent = c.cca2;
+        document.getElementById('c-name').textContent = c.name.common;
+        document.getElementById('c-capital').textContent = c.capital ? c.capital.join(', ') : 'N/A';
+        let cur = 'N/A';
+        if (c.currencies) cur = Object.values(c.currencies).map(x => `${x.name} (${x.symbol})`).join(', ');
+        document.getElementById('c-currency').textContent = cur;
+        document.getElementById('c-lang').textContent = c.languages ? Object.values(c.languages).join(', ') : 'N/A';
+        document.getElementById('c-timezone').textContent = c.timezones ? c.timezones[0] : 'N/A';
+        infoCard.style.display = 'block';
+    }
 });
 </script>
-</body>
-</html>
+@endpush

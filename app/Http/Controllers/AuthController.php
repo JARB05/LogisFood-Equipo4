@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -23,7 +24,29 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-public function login(Request $request): RedirectResponse
+    /* Método para procesar el registro de usuarios */
+    public function register(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:usuarios,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $usuario = Usuario::create([
+            'id_usuario' => 'USR-' . strtoupper(Str::random(6)),
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'password_hash' => Hash::make($request->password), // Ajusta si tu columna se llama diferente
+            'rol' => 'Cliente', 
+        ]);
+
+        Auth::login($usuario);
+
+        return redirect()->route('productos.menu')->with('success', '¡Cuenta creada con éxito!');
+    }
+
+    public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],

@@ -8,7 +8,15 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
-    /*Mostrar todos los productos (Read)*/
+    /* Mostrar el menú a los clientes (Solo con stock disponible) */
+    public function menu()
+    {
+        $productos = Producto::with('categoria')->where('stock', '>', 0)->get();
+        $categorias = Categoria::all();
+        return view('clientes.menu', compact('productos', 'categorias'));
+    }
+
+    /*Mostrar todos los productos (Read - Panel de Admin)*/
     public function index()
     {
         $productos = Producto::with('categoria')->get();
@@ -25,11 +33,12 @@ class ProductoController extends Controller
     /* Guardar el nuevo producto en la BD (Create)*/
     public function store(Request $request)
     {
-        // Validación de seguridad
+        // Validación de seguridad (Stock agregado)
         $request->validate([
             'id_producto' => 'required|string|max:15|unique:productos',
             'nombre' => 'required|string|max:100',
             'precio' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0', // Obligatorio para el inventario
             'id_categoria' => 'required|exists:categorias,id_categoria',
             'imagen_url' => 'nullable|url|max:255'
         ]);
@@ -53,6 +62,7 @@ class ProductoController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:100',
             'precio' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0', // Obligatorio para el inventario
             'id_categoria' => 'required|exists:categorias,id_categoria',
             'imagen_url' => 'nullable|url|max:255'
         ]);
